@@ -1,8 +1,0 @@
-/home/lagie/Epitech/année3/Graphical/GraphitechECS/build/CMakeFiles/GraphitechECS.dir
-/home/lagie/Epitech/année3/Graphical/GraphitechECS/build/CMakeFiles/edit_cache.dir
-/home/lagie/Epitech/année3/Graphical/GraphitechECS/build/CMakeFiles/rebuild_cache.dir
-/home/lagie/Epitech/année3/Graphical/GraphitechECS/build/_deps/glm-build/CMakeFiles/edit_cache.dir
-/home/lagie/Epitech/année3/Graphical/GraphitechECS/build/_deps/glm-build/CMakeFiles/rebuild_cache.dir
-/home/lagie/Epitech/année3/Graphical/GraphitechECS/build/_deps/glm-build/glm/CMakeFiles/glm.dir
-/home/lagie/Epitech/année3/Graphical/GraphitechECS/build/_deps/glm-build/glm/CMakeFiles/edit_cache.dir
-/home/lagie/Epitech/année3/Graphical/GraphitechECS/build/_deps/glm-build/glm/CMakeFiles/rebuild_cache.dir
