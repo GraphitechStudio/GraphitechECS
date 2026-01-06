@@ -1,0 +1,2 @@
+/usr/bin/ar qc libGraphitechECS.a CMakeFiles/GraphitechECS.dir/Factories/EntityFactory.cpp.o CMakeFiles/GraphitechECS.dir/Tools/gmap_compiler.cpp.o
+/usr/bin/ranlib libGraphitechECS.a
