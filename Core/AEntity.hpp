@@ -11,8 +11,8 @@
 #include <memory>
 #include <vector>
 
-#include <Graphitech/ECS/Core/IComponent.hpp>
-#include <Graphitech/ECS/Core/IEntity.hpp>
+#include "Core/IComponent.hpp"
+#include "Core/IEntity.hpp"
 
 using ComponentID = std::size_t;
 using Group = std::size_t;

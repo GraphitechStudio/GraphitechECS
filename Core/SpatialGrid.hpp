@@ -11,7 +11,7 @@
 #ifndef SPATIAL_GRID_HPP
 #define SPATIAL_GRID_HPP
 
-#include <Graphitech/ECS/Core/Types.hpp>
+#include "Types.hpp"
 #include <unordered_map>
 #include <vector>
 #include <algorithm>

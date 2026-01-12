@@ -1,7 +1,8 @@
 #ifndef MAP_LOADER_HPP
     #define MAP_LOADER_HPP
 
-#include <Graphitech/Engine/DLLoader.hpp>
+// ECS does not include Engine; dynamic loading facilities must be provided
+// by external modules if needed.
 #include <functional>
 #include <iostream>
 #include <string>
@@ -87,7 +88,7 @@ inline bool try_load_map_library(Scene& s, const std::string& name) {
         return true;
     }
 
-#if defined(__unix__)
+#if defined(__unix__) && 0
     std::vector<std::string> candidates;
     // New paths: Games/<game>/Client compiled to build/maps/<game>/
     candidates.push_back(std::string("build/maps/") + name + "/libmap_" + name + ".so");
@@ -108,7 +109,7 @@ inline bool try_load_map_library(Scene& s, const std::string& name) {
     }
 
     using RegFn = void (*)(Scene&);
-    static std::vector<std::unique_ptr<DLLoader<RegFn>>> s_loaders;
+    static std::vector<std::unique_ptr<void>> s_loaders;
     
     for (auto& soPath : candidates) {
         struct stat st;
@@ -143,6 +144,7 @@ inline bool try_load_map_library(Scene& s, const std::string& name) {
     std::cerr << "[MapLoader] Failed to load map '" << name << "'\n";
     return false;
 #else
+    // Dynamic loading disabled inside ECS: only pre-registered maps are supported
     return false;
 #endif
 }

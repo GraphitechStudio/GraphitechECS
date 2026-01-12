@@ -1,7 +1,7 @@
 #ifndef TTL_COMPONENT_HPP
 #define TTL_COMPONENT_HPP
 
-#include <Graphitech/ECS/Core/AComponent.hpp>
+#include "Core/AComponent.hpp"
 
 namespace ECS {
     /**

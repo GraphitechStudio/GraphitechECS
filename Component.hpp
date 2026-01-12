@@ -1,7 +1,7 @@
 #ifndef COMPONENT_HPP
     #define COMPONENT_HPP
 
-#include <Graphitech/ECS/Core/Types.hpp>
+#include "Core/Types.hpp"
 #include <unordered_map>
 
 namespace ECS {

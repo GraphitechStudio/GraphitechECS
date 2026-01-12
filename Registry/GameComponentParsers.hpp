@@ -13,7 +13,7 @@
 
 #include <ECS.hpp>
 
-#include <Graphitech/Engine/Loaders/GMapLoader.hpp>
+#include "Loaders/GMapLoader.hpp"
 
 namespace ECS {
 

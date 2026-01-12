@@ -8,7 +8,7 @@
 #ifndef COMPONENT_REGISTRATION_HPP
 #define COMPONENT_REGISTRATION_HPP
 
-#include <Graphitech/ECS/Registry/ComponentRegistry.hpp>
+#include "ComponentRegistry.hpp"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
