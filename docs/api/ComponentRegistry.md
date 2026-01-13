@@ -194,6 +194,7 @@ The ComponentRegistry automatically registers parsers for built-in components:
 - `VelocityComponent`
 - `ScaleComponent`
 - `RotationComponent`
+- `TextureComponent`
 - `RenderCircle`
 - `RenderLine`
 - `TTLComponent`

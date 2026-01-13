@@ -31,6 +31,7 @@ This document describes the built-in components provided by the GraphitechECS li
 - [VelocityComponent](#velocitycomponent)
 - [ScaleComponent](#scalecomponent)
 - [RotationComponent](#rotationcomponent)
+- [TextureComponent](#texturecomponent)
 - [Render Components](#render-components)
 - [TTLComponent](#ttlcomponent)
 - [CollisionComponent](#collisioncomponent)
@@ -148,6 +149,36 @@ scene.addComponent(entity, rot);
 {
   "RotationComponent": {
     "angle": 1.5708
+  }
+}
+```
+
+---
+
+## TextureComponent
+
+Represents texture information for rendering.
+
+**Header:** `Components/TextureComponent.hpp`
+
+**Members:**
+- `std::string texturePath`: Path to the texture file
+- `bool enabled`: Whether the texture should be rendered (default: true)
+
+**Example:**
+```cpp
+ECS::TextureComponent tex;
+tex.texturePath = "assets/player.png";
+tex.enabled = true;
+scene.addComponent(entity, tex);
+```
+
+**JSON Format:**
+```json
+{
+  "TextureComponent": {
+    "texturePath": "assets/texture.png",
+    "enabled": true
   }
 }
 ```

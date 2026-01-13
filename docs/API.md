@@ -161,6 +161,7 @@ Pre-implemented components for common game development needs.
 - `VelocityComponent` - Linear velocity
 - `ScaleComponent` - Rendering scale
 - `RotationComponent` - Rotation angle
+- `TextureComponent` - Texture rendering
 - `RenderCircle` - Debug circle rendering
 - `RenderLine` - Debug line rendering
 - `TTLComponent` - Time-to-live
