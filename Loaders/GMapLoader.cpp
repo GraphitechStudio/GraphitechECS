@@ -8,6 +8,7 @@
 #include <Graphitech/ECS/Components/ScaleComponent.hpp>
 #include <Graphitech/ECS/Components/RotationComponent.hpp>
 #include <Graphitech/ECS/Components/VelocityComponent.hpp>
+#include <Graphitech/ECS/Components/TextureComponent.hpp>
 #include <Graphitech/ECS/Components/UIComponent.hpp>
 #include <Graphitech/Engine/UI/UIButton.hpp>
 #include <Graphitech/Engine/UI/UIPanel.hpp>
@@ -54,6 +55,20 @@ GMapLoader::GMapLoader() {
         if (data.contains("vx")) vel.vx = data["vx"].get<float>();
         if (data.contains("vy")) vel.vy = data["vy"].get<float>();
         s.addComponent(e, vel);
+    });
+
+    // TextureComponent (image rendering)
+    registerParser("TextureComponent", [](Scene& s, Entity e, const json& data) {
+        if (!data.contains("path")) {
+            std::cerr << "[GMapLoader] TextureComponent missing 'path' field" << std::endl;
+            return;
+        }
+        std::cout << "ici" << std::endl;
+        std::string path = data["path"].get<std::string>();
+        bool enabled = data.value("enabled", true);
+        TextureComponent tex(path);
+        tex.enabled = enabled;
+        s.addComponent(e, tex);
     });
 
     // UIComponent - Button

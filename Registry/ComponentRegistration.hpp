@@ -9,6 +9,7 @@
 #define COMPONENT_REGISTRATION_HPP
 
 #include "ComponentRegistry.hpp"
+#include <Graphitech/ECS/Components/TextureComponent.hpp>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -128,31 +129,15 @@ inline void registerDefaultComponents() {
             s.addComponent(e, rot);
         });
 
-    // TextureComponent (texture path and enabled flag)
+    // TextureComponent (image rendering)
     ECS::ComponentRegistry::get().registerParser("TextureComponent",
         [](ECS::Scene& s, ECS::Entity e, const json& data) {
+            if (!data.contains("path")) return; // ignore if no path
+            std::cout << "ici" << std::endl;
             ECS::TextureComponent tex;
-            if (data.contains("texturePath")) tex.texturePath = data["texturePath"].get<std::string>();
-            if (data.contains("enabled")) tex.enabled = data["enabled"].get<bool>();
+            tex.texturePath = data.value("path", "");
+            tex.enabled = data.value("enabled", true);
             s.addComponent(e, tex);
-        });
-
-    // CollisionComponent (AABB collision box)
-    ECS::ComponentRegistry::get().registerParser("CollisionComponent",
-        [](ECS::Scene& s, ECS::Entity e, const json& data) {
-            ECS::CollisionComponent coll;
-            if (data.contains("hx")) coll.hx = data["hx"].get<float>();
-            if (data.contains("hy")) coll.hy = data["hy"].get<float>();
-            if (data.contains("solid")) coll.solid = data["solid"].get<bool>();
-            s.addComponent(e, coll);
-        });
-
-    // TTLComponent (time-to-live)
-    ECS::ComponentRegistry::get().registerParser("TTLComponent",
-        [](ECS::Scene& s, ECS::Entity e, const json& data) {
-            ECS::TTLComponent ttl;
-            if (data.contains("ttl")) ttl.ttl = data["ttl"].get<float>();
-            s.addComponent(e, ttl);
         });
 }
 #endif // COMPONENT_REGISTRATION_HPP
