@@ -17,7 +17,6 @@ add_library(GMapLoader OBJECT
 
 target_include_directories(GMapLoader PUBLIC
     ${CMAKE_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../..
 )
 
 # Add GLAD include directory if available
@@ -26,7 +25,10 @@ if(TARGET glad_lib)
     target_link_libraries(GMapLoader PUBLIC glad_lib)
 endif()
 
-# ECS must not include Engine headers; UI integration should live in Engine.
+# Add Engine include directory for UI headers (using relative path from ECS/Loaders)
+target_include_directories(GMapLoader PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Engine
+)
 
 # Add only the include directories for GLM (don't link it - it's header-only)
 if(DEFINED glm_SOURCE_DIR)
@@ -36,10 +38,9 @@ else()
     target_include_directories(GMapLoader PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../.cpm-cache/glm/*/glm)
 endif()
 
-# nlohmann_json is header-only; include its headers when available
-if(DEFINED nlohmann_json_SOURCE_DIR)
-    target_include_directories(GMapLoader PUBLIC ${nlohmann_json_SOURCE_DIR}/include)
-endif()
+target_link_libraries(GMapLoader PUBLIC
+    nlohmann_json::nlohmann_json
+)
 
 # Export for parent
 set_target_properties(GMapLoader PROPERTIES
@@ -53,13 +54,12 @@ add_executable(gmap-compiler
     GMapCompiler.hpp
 )
 
-if(DEFINED nlohmann_json_SOURCE_DIR)
-    target_include_directories(gmap-compiler PRIVATE ${nlohmann_json_SOURCE_DIR}/include)
-endif()
+target_link_libraries(gmap-compiler PRIVATE
+    nlohmann_json::nlohmann_json
+)
 
 target_include_directories(gmap-compiler PRIVATE
     ${CMAKE_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../..
 )
 
 # Add GLM include directories if available

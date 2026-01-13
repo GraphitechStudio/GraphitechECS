@@ -8,7 +8,14 @@
 #include <Graphitech/ECS/Components/ScaleComponent.hpp>
 #include <Graphitech/ECS/Components/RotationComponent.hpp>
 #include <Graphitech/ECS/Components/VelocityComponent.hpp>
-#include <Graphitech/ECS/Components/TextureComponent.hpp>
+#include <Graphitech/ECS/Components/UIComponent.hpp>
+#include <Graphitech/Engine/UI/UIButton.hpp>
+#include <Graphitech/Engine/UI/UIPanel.hpp>
+#include <Graphitech/Engine/UI/UICheckbox.hpp>
+#include <Graphitech/Engine/UI/UISlider.hpp>
+#include <Graphitech/Engine/UI/UITextInput.hpp>
+#include <Graphitech/Engine/UI/UIContextMenu.hpp>
+#include <Graphitech/Engine/UI/UISplitter.hpp>
 #include <fstream>
 #include <iostream>
 #include <sys/stat.h>
@@ -49,17 +56,112 @@ GMapLoader::GMapLoader() {
         s.addComponent(e, vel);
     });
 
-    // TextureComponent (path, enabled)
-    registerParser("TextureComponent", [](Scene& s, Entity e, const json& data) {
-        TextureComponent tex;
-        if (data.contains("path")) tex.texturePath = data["path"].get<std::string>();
-        if (data.contains("enabled")) tex.enabled = data["enabled"].get<bool>();
-        s.addComponent(e, tex);
+    // UIComponent - Button
+    registerParser("UIButton", [](Scene& s, Entity e, const json& data) {
+        float x = data.value("x", 0.0f);
+        float y = data.value("y", 0.0f);
+        float width = data.value("width", 100.0f);
+        float height = data.value("height", 50.0f);
+        auto button = std::make_shared<Graphitech::UI::UIButton>(x, y, width, height);
+        s.addComponent(e, UIComponent(button));
     });
 
-    // Note: UI parsers are intentionally not registered here to keep ECS
-    // independent from Engine/UI. UI components should be parsed/registered
-    // by the Engine or game-specific modules.
+    // UIComponent - Panel
+    registerParser("UIPanel", [](Scene& s, Entity e, const json& data) {
+        float x = data.value("x", 0.0f);
+        float y = data.value("y", 0.0f);
+        float width = data.value("width", 200.0f);
+        float height = data.value("height", 200.0f);
+        auto panel = std::make_shared<Graphitech::UI::UIPanel>(x, y, width, height);
+        s.addComponent(e, UIComponent(panel));
+    });
+
+    // UIComponent - Checkbox
+    registerParser("UICheckbox", [](Scene& s, Entity e, const json& data) {
+        float x = data.value("x", 0.0f);
+        float y = data.value("y", 0.0f);
+        float size = data.value("size", 20.0f);
+        std::string label = data.value("label", "");
+        auto checkbox = std::make_shared<Graphitech::UI::UICheckbox>(x, y, size, label);
+        if (data.contains("checked")) {
+            checkbox->SetChecked(data["checked"].get<bool>());
+        }
+        s.addComponent(e, UIComponent(checkbox));
+    });
+
+    // UIComponent - Slider
+    registerParser("UISlider", [](Scene& s, Entity e, const json& data) {
+        float x = data.value("x", 0.0f);
+        float y = data.value("y", 0.0f);
+        float width = data.value("width", 200.0f);
+        float height = data.value("height", 20.0f);
+        auto slider = std::make_shared<Graphitech::UI::UISlider>(x, y, width, height);
+        s.addComponent(e, UIComponent(slider));
+    });
+
+    // UIComponent - TextInput
+    registerParser("UITextInput", [](Scene& s, Entity e, const json& data) {
+        float x = data.value("x", 0.0f);
+        float y = data.value("y", 0.0f);
+        float width = data.value("width", 200.0f);
+        float height = data.value("height", 30.0f);
+        auto textInput = std::make_shared<Graphitech::UI::UITextInput>(x, y, width, height);
+        s.addComponent(e, UIComponent(textInput));
+    });
+
+    // UIComponent - ContextMenu
+    registerParser("UIContextMenu", [](Scene& s, Entity e, const json& data) {
+        float x = data.value("x", 0.0f);
+        float y = data.value("y", 0.0f);
+        float width = data.value("width", 150.0f);
+        float height = data.value("height", 100.0f);
+        auto contextMenu = std::make_shared<Graphitech::UI::UIContextMenu>();
+        contextMenu->SetPosition(x, y);
+        contextMenu->SetSize(width, height);
+        s.addComponent(e, UIComponent(contextMenu));
+    });
+
+    // UIComponent - Splitter
+    registerParser("UISplitter", [](Scene& s, Entity e, const json& data) {
+        float x = data.value("x", 0.0f);
+        float y = data.value("y", 0.0f);
+        float size = data.value("size", 200.0f);
+        std::string orientStr = data.value("orientation", "vertical");
+        Graphitech::UI::SplitterOrientation orientation = 
+            (orientStr == "horizontal") ? Graphitech::UI::SplitterOrientation::Horizontal 
+                                        : Graphitech::UI::SplitterOrientation::Vertical;
+        auto splitter = std::make_shared<Graphitech::UI::UISplitter>(x, y, size, orientation);
+        s.addComponent(e, UIComponent(splitter));
+    });
+
+    // Generic UIComponent parser that dispatches based on widget_type
+    registerParser("UIComponent", [this](Scene& s, Entity e, const json& data) {
+        if (!data.contains("widget_type")) {
+            std::cerr << "[GMapLoader] UIComponent missing widget_type field" << std::endl;
+            return;
+        }
+        
+        std::string widgetType = data["widget_type"];
+        
+        // Dispatch to the appropriate UI widget parser
+        if (widgetType == "button" && parsers_.count("UIButton")) {
+            parsers_["UIButton"](s, e, data);
+        } else if (widgetType == "panel" && parsers_.count("UIPanel")) {
+            parsers_["UIPanel"](s, e, data);
+        } else if (widgetType == "checkbox" && parsers_.count("UICheckbox")) {
+            parsers_["UICheckbox"](s, e, data);
+        } else if (widgetType == "slider" && parsers_.count("UISlider")) {
+            parsers_["UISlider"](s, e, data);
+        } else if (widgetType == "textinput" && parsers_.count("UITextInput")) {
+            parsers_["UITextInput"](s, e, data);
+        } else if (widgetType == "contextmenu" && parsers_.count("UIContextMenu")) {
+            parsers_["UIContextMenu"](s, e, data);
+        } else if (widgetType == "splitter" && parsers_.count("UISplitter")) {
+            parsers_["UISplitter"](s, e, data);
+        } else {
+            std::cerr << "[GMapLoader] Unknown widget_type: " << widgetType << std::endl;
+        }
+    });
 }
 
 void GMapLoader::registerParser(const std::string& componentType, ComponentParser parser) {
