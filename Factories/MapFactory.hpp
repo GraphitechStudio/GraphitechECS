@@ -64,7 +64,7 @@ namespace ECS {
             return true;
         }
 
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
         using namespace std::filesystem;
 
         std::vector<path> candidates;

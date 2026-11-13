@@ -9,7 +9,7 @@
 #include <vector>
 #include <memory>
 
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
 #include <sys/stat.h>
 #include <unistd.h>
 #include <limits.h>
@@ -87,7 +87,7 @@ inline bool try_load_map_library(Scene& s, const std::string& name) {
         return true;
     }
 
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
     std::vector<std::string> candidates;
     // New paths: Games/<game>/Client compiled to build/maps/<game>/
     candidates.push_back(std::string("build/maps/") + name + "/libmap_" + name + ".so");
